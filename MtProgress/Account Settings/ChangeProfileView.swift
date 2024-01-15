@@ -14,6 +14,9 @@ struct ChangeProfileView: View {
     @State private var wrongURL: Bool = false
     @State private var showAlert: Bool = false
     @State private var validImage: Bool = false
+    @FocusState private var focused: Bool
+    @State private var showText: Bool = false
+    
     func changeProfilePicture() async {
         if let url = URL(string: photoURL) {
             if await viewModel.changeProfilePicture(url: url) == true {
@@ -27,17 +30,22 @@ struct ChangeProfileView: View {
             }
         }
     }
+    
     var body: some View {
         NavigationStack {
             VStack {
-                Text("Ready for a new look?")
-                    .font(.system(size: 23, weight: .black))
-                    .foregroundStyle(.white)
-                    .multilineTextAlignment(.center)
-                Text("Update your profile picture using a URL")
-                    .font(.system(size: 20, weight: .medium))
-                    .foregroundStyle(.white)
-                    .padding()
+                if !showText {
+                    Text("Ready for a new look?")
+                        .font(.system(size: 23, weight: .black))
+                        .foregroundStyle(.white)
+                        .multilineTextAlignment(.center)
+                    Text("Update your profile picture using a URL")
+                        .font(.system(size: 20, weight: .medium))
+                        .foregroundStyle(.white)
+                        .padding()
+                } else {
+                    Spacer(minLength: 50)
+                }
                 
                 TextField("URL", text: $photoURL)
                     .padding()
@@ -47,6 +55,12 @@ struct ChangeProfileView: View {
                     .autocorrectionDisabled()
                     .textInputAutocapitalization(.never)
                     .keyboardType(.URL)
+                    .focused($focused)
+                    .onAppear {
+                        if let url = viewModel.user?.photoURL {
+                            photoURL = url.absoluteString
+                        }
+                    }
                 
                 AsyncImage(url: URL(string: photoURL)) { image in
                     image
@@ -87,6 +101,11 @@ struct ChangeProfileView: View {
                 .disabled(!validImage)
                 .offset(x: wrongURL ? -5 : 0)
             }
+            .onChange(of: focused, { oldValue, newValue in
+                withAnimation {
+                    showText = newValue
+                }
+            })
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(primaryColour)
             .navigationBarBackButtonHidden()

@@ -17,37 +17,77 @@ struct ChangePasswordView: View {
     @State private var isShowingNew: Bool = false
     @State private var isShowingConfirm: Bool = false
     @State private var showAlert: Bool = false
+    @FocusState private var focusedField: FocusedField?
+    @State private var showText: Bool = false
+    
     var valid: Bool {
-        if confirmPassword == newPassword || !newPassword.isEmpty || !confirmPassword.isEmpty {
-            return true
-        } else {
+        if confirmPassword == newPassword && !newPassword.isEmpty && !confirmPassword.isEmpty {
             return false
+        } else {
+            return true
         }
     }
+    
     func changePassword() async {
-        if await viewModel.changePassword(password: newPassword) == true {
+        let changed = await viewModel.changePassword(oldPassword: oldPassword, password: newPassword)
+        if changed == true {
             dismiss()
         } else {
             showAlert = true
         }
     }
     
+    enum FocusedField {
+        case old, password, confirmed
+    }
+    
     var body: some View {
         NavigationStack {
             VStack {
-                Text("Want to change your password?")
-                    .font(.system(size: 24, weight: .black))
-                    .foregroundStyle(.white)
-                    .frame(height: 58)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 30)
-                Text("Your new password must be different from previous used passwords.")
-                    .font(.system(size: 20, weight: .medium))
-                    .foregroundStyle(.white)
-                    .multilineTextAlignment(.center)
-                    .frame(height: 48)
-                    .padding(.horizontal, 30)
-                    .padding(.top, 15)
+                if !showText {
+                    Text("Want to change your password?")
+                        .font(.system(size: 24, weight: .black))
+                        .foregroundStyle(.white)
+                        .frame(height: 58)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 30)
+                    Text("Your new password must be different from previous used passwords.")
+                        .font(.system(size: 20, weight: .medium))
+                        .foregroundStyle(.white)
+                        .multilineTextAlignment(.center)
+                        .frame(height: 48)
+                        .padding(.horizontal, 30)
+                        .padding(.top, 15)
+                }
+                
+                ZStack(alignment: .trailing) {
+                    Group {
+                        if !isShowingOld {
+                            SecureField("Old Password", text: $oldPassword)
+                        } else {
+                            TextField("Old Password", text: $oldPassword)
+                                .autocorrectionDisabled()
+                                .autocapitalization(.none)
+                        }
+                    }
+                    .focused($focusedField, equals: .old)
+                    .padding()
+                    .frame(width: 360, height: 60)
+                    .background(textfieldColour.cornerRadius(15))
+                    .padding([.horizontal, .top])
+                    
+                    Button {
+                        isShowingOld.toggle()
+                    } label: {
+                        Image(systemName: isShowingOld ? "eye.slash" : "eye")
+                            .accentColor(primaryColour)
+                            .opacity(0.8)
+                            .scaleEffect(1.2)
+                            .frame(width: 50, height: 50)
+                    }
+                    .offset(x: -20, y: 7)
+                }
+                .padding()
 
                 ZStack(alignment: .trailing) {
                     Group {
@@ -59,10 +99,11 @@ struct ChangePasswordView: View {
                                 .autocapitalization(.none)
                         }
                     }
+                    .focused($focusedField, equals: .password)
                     .padding()
                     .frame(width: 360, height: 60)
                     .background(textfieldColour.cornerRadius(15))
-                    .padding([.horizontal, .top])
+                    .padding(.horizontal)
                     
                     Button {
                         isShowingNew.toggle()
@@ -76,16 +117,18 @@ struct ChangePasswordView: View {
                     .offset(x: -20, y: 7)
                 }
                 .padding()
+                
                 ZStack(alignment: .trailing) {
                     Group {
                         if !isShowingConfirm {
-                            SecureField("Password", text: $viewModel.password)
+                            SecureField("Confirm Password", text: $confirmPassword)
                         } else {
-                            TextField("Password", text: $viewModel.password)
+                            TextField("Confirm Password", text: $confirmPassword)
                                 .autocorrectionDisabled()
                                 .autocapitalization(.none)
                         }
                     }
+                    .focused($focusedField, equals: .confirmed)
                     .padding()
                     .frame(width: 360, height: 60)
                     .background(textfieldColour.cornerRadius(15))
@@ -106,7 +149,20 @@ struct ChangePasswordView: View {
                     .resizable()
                     .frame(width: 285, height: 230)
                     .padding()
+                    .padding(.top, 20)
             }
+            .padding(.top, showText ? 120 : 0)
+            .onChange(of: focusedField, { oldValue, newValue in
+                if focusedField == nil {
+                    withAnimation {
+                        showText = false
+                    }
+                } else {
+                    withAnimation {
+                        showText = true
+                    }
+                }
+            })
             .alert(isPresented: $showAlert ) {
                 Alert(title: Text("Error"), message: Text("\(viewModel.errorMessage)"), dismissButton: .cancel((Text("Cancel"))))
             }

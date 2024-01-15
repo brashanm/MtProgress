@@ -13,7 +13,6 @@ struct LoadingView: View {
         VStack {
             Image(.transparentLogo)
                 .resizable()
-                .padding(30)
                 .scaledToFit()
         }
         .ignoresSafeArea()

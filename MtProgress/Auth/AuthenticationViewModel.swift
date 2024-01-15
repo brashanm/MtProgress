@@ -8,6 +8,7 @@
 import Foundation
 import FirebaseAuth
 import Combine
+import UserNotifications
 
 enum AuthenticationState {
     case unauthenticated
@@ -68,6 +69,7 @@ class AuthenticationViewModel: ObservableObject {
     
     func reset() {
         flow = .signUp
+        name = ""
         email = ""
         password = ""
         confirmPassword = ""
@@ -88,6 +90,7 @@ extension AuthenticationViewModel {
             let authResult = try await Auth.auth().signIn(withEmail: email, password: password)
             user = authResult.user
             print("User \(authResult.user.uid) signed in")
+            notification()
             return true
         }
         catch {
@@ -107,10 +110,11 @@ extension AuthenticationViewModel {
             changeRequest?.displayName = name
             do {
                 try await changeRequest?.commitChanges()
-                print("Success updating name to: \(user?.displayName ?? "NOTHING")")
+                print("Success updating name to: \(user?.displayName ?? "")")
             } catch {
                 print("Error updating display name: \(error.localizedDescription)")
             }
+            notification()
             return true
         }
         catch {
@@ -118,6 +122,17 @@ extension AuthenticationViewModel {
             errorMessage = error.localizedDescription
             return false
         }
+    }
+    
+    func notification() {
+        let content = UNMutableNotificationContent()
+        content.title = "Mount Progress"
+        content.body = "You haven't posted your progress picture for today. Would you like to do it now?"
+        content.sound = UNNotificationSound.default
+        
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 86400, repeats: true)
+        
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
     }
     
     func changeName(name: String) async -> Bool {
@@ -134,20 +149,68 @@ extension AuthenticationViewModel {
         }
     }
     
-    func changePassword(password: String) async -> Bool {
-        var success: Bool = false
-        user?.updatePassword(to: password) { error in
-            if let error = error {
-                self.errorMessage = error.localizedDescription
-                print("Error updating password: \(error.localizedDescription)")
-                success = false
+    func changePassword(oldPassword: String, password: String) async -> Bool {
+        do {
+            if let email = user?.email {
+                let authenticated = await reauthenticate(email: email, password: oldPassword)
+                if !authenticated {
+                    return false
+                }
             } else {
-                print("Password updated successfully")
-                success = true
+                self.errorMessage = "No Email"
+                return false
             }
+            
+            let result: Bool = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Bool, Error>) in
+                user?.updatePassword(to: password) { error in
+                    if let error = error {
+                        self.errorMessage = error.localizedDescription
+                        print("Error updating password: \(error.localizedDescription)")
+                        continuation.resume(throwing: error)
+                    } else {
+                        print("Password updated successfully")
+                        continuation.resume(returning: true)
+                    }
+                }
+            }
+            return result
+        } catch {
+            return false
         }
-        return success
     }
+    
+    func reauthenticate(email: String, password: String) async -> Bool {
+        let credential = FirebaseAuth.EmailAuthProvider.credential(withEmail: email, password: password)
+        do {
+            try await user?.reauthenticate(with: credential)
+            return true
+        } catch {
+            self.errorMessage = error.localizedDescription
+            return false
+        }
+    }
+    
+    func deleteAccount(password: String) async -> Bool {
+        do {
+            if let email = user?.email {
+                let authenticated = await reauthenticate(email: email, password: password)
+                if !authenticated {
+                    return false
+                }
+            } else {
+                self.errorMessage = "No Email"
+                return false
+            }
+            
+            try await user?.delete()
+            authenticationState = .unauthenticated
+        } catch {
+            errorMessage = error.localizedDescription
+            return false
+        }
+        return true
+    }
+
     
     func changeProfilePicture(url: URL) async -> Bool {
         let changeRequest = user?.createProfileChangeRequest()
@@ -166,17 +229,6 @@ extension AuthenticationViewModel {
     func signOut() -> Bool {
         do {
             try Auth.auth().signOut()
-            authenticationState = .unauthenticated
-        } catch {
-            errorMessage = error.localizedDescription
-            return false
-        }
-        return true
-    }
-
-    func deleteAccount() async -> Bool {
-        do {
-            try await user?.delete()
             authenticationState = .unauthenticated
         } catch {
             errorMessage = error.localizedDescription

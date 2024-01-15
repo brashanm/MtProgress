@@ -12,10 +12,9 @@ struct AccountSettingsView: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var viewModel: AuthenticationViewModel
     @Environment(\.requestReview) var requestReview
-    @State private var image: Bool = true
     @State private var requestedSignOut: Bool = false
-    @State private var requesterdDeleteAccount: Bool = false
     @State private var showAlert: Bool = false
+    @State private var showReauthenticate: Bool = false
     
     var creationDate: String {
         var currentDate: Date
@@ -30,51 +29,44 @@ struct AccountSettingsView: View {
         let formattedDate = dateFormatter.string(from: currentDate)
         return formattedDate
     }
-    
-    func deleteAccount() async {
-        if await viewModel.deleteAccount() == false {
-            showAlert = true
-        }
-    }
+
     
     func signOut() {
         if viewModel.signOut() == false {
             showAlert = true
+        } else {
+            dismiss()
         }
     }
     
     var body: some View {
         NavigationStack {
             VStack {
-                Spacer()
-                
                 HStack {
                     NavigationLink {
                         ChangeProfileView()
                             .environmentObject(viewModel)
                     } label: {
                         ZStack {
-                            if image == true {
-                                AsyncImage(url: URL(string: "https://images5.alphacoders.com/132/1325878.png")) { image in
-                                    image
-                                        .resizable()
-                                        .clipShape(Circle())
-                                        .scaledToFill()
-                                        .frame(width: 150, height: 150)
-                                        .overlay {
-                                            Circle()
-                                                .stroke(tertiaryColour, lineWidth: 8)
-                                        }
-                                } placeholder: {
-                                    Image(systemName: "person.crop.circle.fill")
-                                        .resizable()
-                                        .foregroundStyle(middle)
-                                        .frame(width: 150, height: 150)
-                                        .overlay {
-                                            Circle()
-                                                .stroke(tertiaryColour, lineWidth: 10)
-                                        }
-                                }
+                            AsyncImage(url: viewModel.user?.photoURL) { image in
+                                image
+                                    .resizable()
+                                    .clipShape(Circle())
+                                    .scaledToFill()
+                                    .frame(width: 150, height: 150)
+                                    .overlay {
+                                        Circle()
+                                            .stroke(tertiaryColour, lineWidth: 8)
+                                    }
+                            } placeholder: {
+                                Image(systemName: "person.crop.circle.fill")
+                                    .resizable()
+                                    .foregroundStyle(middle)
+                                    .frame(width: 150, height: 150)
+                                    .overlay {
+                                        Circle()
+                                            .stroke(tertiaryColour, lineWidth: 10)
+                                    }
                             }
                             
                             Group {
@@ -90,17 +82,18 @@ struct AccountSettingsView: View {
                         }
                         .padding(.bottom, 10)
                     }
-                    
-                    VStack {
-                        Text("Test")
-                            .foregroundStyle(middle)
-                            .font(.system(size: 26, weight: .heavy))
-                        Text(verbatim: "test@test.com")
-                            .buttonStyle(.plain)
-                            .foregroundStyle(middle)
-                            .font(.system(size: 20, weight: .semibold))
-                            .padding(.horizontal)
-                            .padding(.vertical, 2)
+                    if let user = viewModel.user {
+                        VStack {
+                            Text(user.displayName ?? "")
+                                .foregroundStyle(middle)
+                                .font(.system(size: 26, weight: .heavy))
+                            Text(user.email ?? "")
+                                .buttonStyle(.plain)
+                                .foregroundStyle(middle)
+                                .font(.system(size: 20, weight: .semibold))
+                                .padding(.horizontal)
+                                .padding(.vertical, 2)
+                        }
                     }
                 }
                 
@@ -193,6 +186,11 @@ struct AccountSettingsView: View {
                                 
                                 Spacer()
                                 
+                                Image(systemName: "chevron.right")
+                                    .scaleEffect(1.2)
+                                    .foregroundStyle(middle)
+                                    .frame(width: 20, height: 20)
+                                
                             }
                             .padding(.horizontal, 30)
                         }
@@ -200,9 +198,9 @@ struct AccountSettingsView: View {
                         .padding()
                 }
                 
-                
-                Button {
-                    requestedSignOut = false
+                NavigationLink {
+                    DeleteView()
+                        .environmentObject(viewModel)
                 } label: {
                     RoundedRectangle(cornerRadius: 25)
                         .fill(tertiaryColour)
@@ -220,6 +218,10 @@ struct AccountSettingsView: View {
                                 
                                 Spacer()
                                 
+                                Image(systemName: "chevron.right")
+                                    .scaleEffect(1.2)
+                                    .foregroundStyle(.red)
+                                    .frame(width: 20, height: 20)
                             }
                             .padding(.horizontal, 30)
                         }
@@ -230,40 +232,35 @@ struct AccountSettingsView: View {
                 Button {
                     requestReview()
                 } label: {
-                    Text("❤️  Rate this app")
+                    Text("💛  Rate this app")
                         .font(.system(size: 22, weight: .bold))
                         .foregroundStyle(middle)
                 }
                 .padding(.vertical, 10)
                 .padding(.bottom, 20)
             }
+            .padding(.top, 50)
             .alert("Are you sure you want to sign out", isPresented: $requestedSignOut) {
                 Button("Sign Out", role: .destructive) {
                     signOut()
                 }
                 Button("Cancel", role: .cancel) {
-                    dismiss()
+                    print("Cancelled")
                 }
             } message: {
-                Text("This action will permanently delete your account!")
+                Text("You can log back in with your credentials at any time!")
             }
-            .alert("Are you sure you want to delete your account", isPresented: $requesterdDeleteAccount) {
-                Button("Delete", role: .destructive) {
-                    print("hello")
-                }
-                Button("Cancel", role: .cancel) {
-                    dismiss()
-                }
-            } message: {
-                Text("This action will permanently delete your account!")
-            }
-            .alert(isPresented: $showAlert ) {
+            .alert(isPresented: $showAlert) {
                 Alert(title: Text("Something went wrong"), message: Text(viewModel.errorMessage), dismissButton: .cancel((Text("Cancel"))))
             }
-            .ignoresSafeArea()
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(primaryColour)
             .navigationBarBackButtonHidden()
+            .onAppear {
+                if viewModel.authenticationState == .unauthenticated {
+                    dismiss()
+                }
+            }
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Button {
@@ -282,6 +279,11 @@ struct AccountSettingsView: View {
                         .font(.system(size: 25, weight: .heavy))
                         .foregroundStyle(middle)
                         .padding(.top, 5)
+                }
+            }
+            .onAppear {
+                if let window = UIApplication.shared.windows.first {
+                    window.backgroundColor = UIColor(red: 58 / 255, green: 58 / 255, blue: 81 / 255, alpha: 1)
                 }
             }
         }

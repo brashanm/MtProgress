@@ -39,6 +39,9 @@ struct SignUpView: View {
                     .background(textfieldColour.cornerRadius(15))
                     .frame(width: 360, height: 60)
                     .padding([.horizontal, .top])
+                    .autocorrectionDisabled()
+                    .autocapitalization(.words)
+                
                 
                 TextField("Email", text: $viewModel.email)
                     .padding()
@@ -140,6 +143,7 @@ struct SignUpView: View {
                         .padding(2)
                     Button {
                         withAnimation {
+                            viewModel.reset()
                             viewModel.switchFlow()
                         }
                     } label: {
@@ -154,7 +158,6 @@ struct SignUpView: View {
             .alert(isPresented: $showAlert ) {
                 Alert(title: Text("Error"), message: Text("\(viewModel.errorMessage)"), dismissButton: .cancel((Text("Cancel"))))
             }
-            .ignoresSafeArea()
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(primaryColour)
         }

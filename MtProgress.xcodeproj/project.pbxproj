@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		423F31D72B5472240078BB0F /* DeleteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423F31D62B5472240078BB0F /* DeleteView.swift */; };
 		42480B742B490B4B001A6F1B /* AuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42480B732B490B4B001A6F1B /* AuthenticationView.swift */; };
 		42480B762B490D4E001A6F1B /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 42480B752B490D4E001A6F1B /* FirebaseAnalytics */; };
 		42480B782B490D4E001A6F1B /* FirebaseAnalyticsOnDeviceConversion in Frameworks */ = {isa = PBXBuildFile; productRef = 42480B772B490D4E001A6F1B /* FirebaseAnalyticsOnDeviceConversion */; };
@@ -14,8 +15,6 @@
 		42480B7C2B490D4E001A6F1B /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 42480B7B2B490D4E001A6F1B /* FirebaseAnalyticsWithoutAdIdSupport */; };
 		42480B7E2B490D4E001A6F1B /* FirebaseAppCheck in Frameworks */ = {isa = PBXBuildFile; productRef = 42480B7D2B490D4E001A6F1B /* FirebaseAppCheck */; };
 		42A53D0F2B4E6A8F00BBB504 /* DailyNotesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A53D0E2B4E6A8F00BBB504 /* DailyNotesView.swift */; };
-		42CF2D8B2B49130900FEDF47 /* PrimaryBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42CF2D8A2B49130900FEDF47 /* PrimaryBackground.swift */; };
-		42CF2D8D2B49131400FEDF47 /* MountainsBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42CF2D8C2B49131400FEDF47 /* MountainsBackground.swift */; };
 		42CF2D8F2B491B7800FEDF47 /* DailyPictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42CF2D8E2B491B7800FEDF47 /* DailyPictureView.swift */; };
 		42CF2D912B4AA0FE00FEDF47 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42CF2D902B4AA0FE00FEDF47 /* LoadingView.swift */; };
 		42CF2D932B4B7EA500FEDF47 /* ChangePasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42CF2D922B4B7EA500FEDF47 /* ChangePasswordView.swift */; };
@@ -63,10 +62,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		423F31D62B5472240078BB0F /* DeleteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteView.swift; sourceTree = "<group>"; };
 		42480B732B490B4B001A6F1B /* AuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationView.swift; sourceTree = "<group>"; };
 		42A53D0E2B4E6A8F00BBB504 /* DailyNotesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyNotesView.swift; sourceTree = "<group>"; };
-		42CF2D8A2B49130900FEDF47 /* PrimaryBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryBackground.swift; sourceTree = "<group>"; };
-		42CF2D8C2B49131400FEDF47 /* MountainsBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MountainsBackground.swift; sourceTree = "<group>"; };
 		42CF2D8E2B491B7800FEDF47 /* DailyPictureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyPictureView.swift; sourceTree = "<group>"; };
 		42CF2D902B4AA0FE00FEDF47 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		42CF2D922B4B7EA500FEDF47 /* ChangePasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordView.swift; sourceTree = "<group>"; };
@@ -131,6 +129,28 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		42A53D102B50B90100BBB504 /* Home Screen */ = {
+			isa = PBXGroup;
+			children = (
+				42E976592B4756C500B8810D /* HomeScreenView.swift */,
+				42CF2D8E2B491B7800FEDF47 /* DailyPictureView.swift */,
+				42A53D0E2B4E6A8F00BBB504 /* DailyNotesView.swift */,
+			);
+			path = "Home Screen";
+			sourceTree = "<group>";
+		};
+		42A53D112B50B91200BBB504 /* Account Settings */ = {
+			isa = PBXGroup;
+			children = (
+				42CF2D922B4B7EA500FEDF47 /* ChangePasswordView.swift */,
+				42CF2D962B4B7F2200FEDF47 /* ChangeProfileView.swift */,
+				42CF2D942B4B7EEE00FEDF47 /* ChangeNameView.swift */,
+				42F40B362B4BD738001AF128 /* AccountSettingsView.swift */,
+				423F31D62B5472240078BB0F /* DeleteView.swift */,
+			);
+			path = "Account Settings";
+			sourceTree = "<group>";
+		};
 		42E975FE2B473F9800B8810D = {
 			isa = PBXGroup;
 			children = (
@@ -155,16 +175,9 @@
 				42E9760C2B473F9800B8810D /* ContentView.swift */,
 				42CF2D902B4AA0FE00FEDF47 /* LoadingView.swift */,
 				42E976512B47560F00B8810D /* StartingScreenView.swift */,
-				42CF2D8A2B49130900FEDF47 /* PrimaryBackground.swift */,
-				42CF2D8C2B49131400FEDF47 /* MountainsBackground.swift */,
-				42E976592B4756C500B8810D /* HomeScreenView.swift */,
-				42CF2D8E2B491B7800FEDF47 /* DailyPictureView.swift */,
-				42A53D0E2B4E6A8F00BBB504 /* DailyNotesView.swift */,
-				42CF2D922B4B7EA500FEDF47 /* ChangePasswordView.swift */,
-				42CF2D962B4B7F2200FEDF47 /* ChangeProfileView.swift */,
-				42CF2D942B4B7EEE00FEDF47 /* ChangeNameView.swift */,
-				42F40B362B4BD738001AF128 /* AccountSettingsView.swift */,
 				42E976602B47577C00B8810D /* Auth */,
+				42A53D102B50B90100BBB504 /* Home Screen */,
+				42A53D112B50B91200BBB504 /* Account Settings */,
 				42E9760E2B473F9A00B8810D /* Assets.xcassets */,
 				42E9765D2B47574300B8810D /* AlfaSlabOne-Regular.ttf */,
 				42E9764F2B47404400B8810D /* GoogleService-Info.plist */,
@@ -301,11 +314,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				42CF2D8B2B49130900FEDF47 /* PrimaryBackground.swift in Sources */,
 				42E976542B47565000B8810D /* AuthenticationViewModel.swift in Sources */,
 				42E9760D2B473F9800B8810D /* ContentView.swift in Sources */,
 				42E9760B2B473F9800B8810D /* MtProgressApp.swift in Sources */,
 				42CF2D972B4B7F2200FEDF47 /* ChangeProfileView.swift in Sources */,
+				423F31D72B5472240078BB0F /* DeleteView.swift in Sources */,
 				42E976562B47567600B8810D /* LoginView.swift in Sources */,
 				42F40B372B4BD738001AF128 /* AccountSettingsView.swift in Sources */,
 				42CF2D932B4B7EA500FEDF47 /* ChangePasswordView.swift in Sources */,
@@ -314,7 +327,6 @@
 				42CF2D8F2B491B7800FEDF47 /* DailyPictureView.swift in Sources */,
 				42E976582B47568E00B8810D /* SignUpView.swift in Sources */,
 				42E9765A2B4756C500B8810D /* HomeScreenView.swift in Sources */,
-				42CF2D8D2B49131400FEDF47 /* MountainsBackground.swift in Sources */,
 				42A53D0F2B4E6A8F00BBB504 /* DailyNotesView.swift in Sources */,
 				42CF2D912B4AA0FE00FEDF47 /* LoadingView.swift in Sources */,
 				42E976522B47560F00B8810D /* StartingScreenView.swift in Sources */,
@@ -455,11 +467,14 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MtProgress/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Mt. Progress";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -467,9 +482,13 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = me.mohanakumar.brashan.MtProgress;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -485,11 +504,14 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MtProgress/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Mt. Progress";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -497,9 +519,13 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = me.mohanakumar.brashan.MtProgress;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

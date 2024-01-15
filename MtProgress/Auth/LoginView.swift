@@ -117,18 +117,17 @@ struct LoginView: View {
                     }
                     .buttonStyle(.plain)
                     .onTapGesture {
+                        viewModel.reset()
                         viewModel.switchFlow()
                     }
                 }
             }
-            .alert(isPresented: $showAlert ) {
+            .alert(isPresented: $showAlert) {
                 Alert(title: Text("Error"), message: Text("\(viewModel.errorMessage)"), dismissButton: .cancel((Text("Cancel"))))
             }
-            .ignoresSafeArea()
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(primaryColour)
         }
-        .toolbar(.hidden)
     }
 }
 

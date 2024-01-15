@@ -6,10 +6,20 @@
 //
 
 import SwiftUI
+import UserNotifications
 
 struct StartingScreenView: View {
     @EnvironmentObject var viewModel: AuthenticationViewModel
     @State private var startAuthorization = false
+    
+    func requestNotificationPermission() {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
+            if let error = error {
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
     var body: some View {
         NavigationStack {
             VStack {
@@ -24,13 +34,21 @@ struct StartingScreenView: View {
                         .transition(.move(edge: .bottom))
                 }
             }
-            .ignoresSafeArea()
             .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, maxHeight: .infinity)
-            .background(MountainsBackground())
+            .background(
+                Image(.mountains2)
+                    .resizable()
+                    .scaledToFill()
+                    .clipped()
+            )
+            .ignoresSafeArea()
             .onTapGesture {
                 withAnimation {
                     startAuthorization = true
                 }
+            }
+            .onAppear {
+                requestNotificationPermission()
             }
         }
     }

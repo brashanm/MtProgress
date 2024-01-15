@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "login.svg",
+      "filename" : "authenticate.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },
