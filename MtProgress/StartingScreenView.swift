@@ -21,35 +21,35 @@ struct StartingScreenView: View {
     }
     
     var body: some View {
-        NavigationStack {
-            VStack {
-                if !startAuthorization {
+        VStack {
+            if !startAuthorization {
+                GeometryReader { geometry in
                     Text("Mt. Progress")
                         .font(.custom(primaryFont, size: 44))
                         .foregroundStyle(primaryColour)
-                        .offset(y: -222)
-                } else {
-                    AuthenticationView()
-                        .environmentObject(viewModel)
-                        .transition(.move(edge: .bottom))
+                        .position(x: geometry.size.width / 2, y: geometry.size.height / 4)
                 }
+            } else {
+                AuthenticationView()
+                    .environmentObject(viewModel)
+                    .transition(.move(edge: .bottom))
             }
-            .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, maxHeight: .infinity)
-            .background(
-                Image(.mountains2)
-                    .resizable()
-                    .scaledToFill()
-                    .clipped()
-            )
-            .ignoresSafeArea()
-            .onTapGesture {
-                withAnimation {
-                    startAuthorization = true
-                }
+        }
+        .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, maxHeight: .infinity)
+        .background(
+            Image(.mountains2)
+                .resizable()
+                .scaledToFill()
+                .clipped()
+        )
+        .ignoresSafeArea()
+        .onTapGesture {
+            withAnimation {
+                startAuthorization = true
             }
-            .onAppear {
-                requestNotificationPermission()
-            }
+        }
+        .onAppear {
+            requestNotificationPermission()
         }
     }
 }

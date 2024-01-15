@@ -43,113 +43,113 @@ struct ChangePasswordView: View {
     
     var body: some View {
         NavigationStack {
-            VStack {
-                if !showText {
-                    Text("Want to change your password?")
-                        .font(.system(size: 24, weight: .black))
-                        .foregroundStyle(.white)
-                        .frame(height: 58)
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal, 30)
-                    Text("Your new password must be different from previous used passwords.")
-                        .font(.system(size: 20, weight: .medium))
-                        .foregroundStyle(.white)
-                        .multilineTextAlignment(.center)
-                        .frame(height: 48)
-                        .padding(.horizontal, 30)
-                        .padding(.top, 15)
-                }
-                
-                ZStack(alignment: .trailing) {
-                    Group {
-                        if !isShowingOld {
-                            SecureField("Old Password", text: $oldPassword)
-                        } else {
-                            TextField("Old Password", text: $oldPassword)
-                                .autocorrectionDisabled()
-                                .autocapitalization(.none)
-                        }
+            GeometryReader { geometry in
+                VStack {
+                    if !showText {
+                        Text("Your new password must be different from previous used passwords.")
+                            .font(.title3)
+                            .bold()
+                            .foregroundStyle(.white)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal, 20)
                     }
-                    .focused($focusedField, equals: .old)
-                    .padding()
-                    .frame(width: 360, height: 60)
-                    .background(textfieldColour.cornerRadius(15))
-                    .padding([.horizontal, .top])
                     
-                    Button {
-                        isShowingOld.toggle()
-                    } label: {
-                        Image(systemName: isShowingOld ? "eye.slash" : "eye")
-                            .accentColor(primaryColour)
-                            .opacity(0.8)
-                            .scaleEffect(1.2)
-                            .frame(width: 50, height: 50)
-                    }
-                    .offset(x: -20, y: 7)
-                }
-                .padding()
-
-                ZStack(alignment: .trailing) {
-                    Group {
-                        if !isShowingNew {
-                            SecureField("New Password", text: $newPassword)
-                        } else {
-                            TextField("New Password", text: $newPassword)
-                                .autocorrectionDisabled()
-                                .autocapitalization(.none)
+                    ZStack(alignment: .trailing) {
+                        Group {
+                            if !isShowingOld {
+                                SecureField("Old Password", text: $oldPassword)
+                            } else {
+                                TextField("Old Password", text: $oldPassword)
+                                    .autocorrectionDisabled()
+                                    .autocapitalization(.none)
+                            }
                         }
-                    }
-                    .focused($focusedField, equals: .password)
-                    .padding()
-                    .frame(width: 360, height: 60)
-                    .background(textfieldColour.cornerRadius(15))
-                    .padding(.horizontal)
-                    
-                    Button {
-                        isShowingNew.toggle()
-                    } label: {
-                        Image(systemName: isShowingNew ? "eye.slash" : "eye")
-                            .accentColor(primaryColour)
-                            .opacity(0.8)
-                            .scaleEffect(1.2)
-                            .frame(width: 50, height: 50)
-                    }
-                    .offset(x: -20, y: 7)
-                }
-                .padding()
-                
-                ZStack(alignment: .trailing) {
-                    Group {
-                        if !isShowingConfirm {
-                            SecureField("Confirm Password", text: $confirmPassword)
-                        } else {
-                            TextField("Confirm Password", text: $confirmPassword)
-                                .autocorrectionDisabled()
-                                .autocapitalization(.none)
+                        .focused($focusedField, equals: .old)
+                        .padding()
+                        .background(textfieldColour.cornerRadius(15))
+                        .frame(maxWidth: 500, maxHeight: 70)
+                        .padding(.top)
+                        .padding(.horizontal, 20)
+                        
+                        Button {
+                            isShowingOld.toggle()
+                        } label: {
+                            Image(systemName: isShowingOld ? "eye.slash" : "eye")
+                                .accentColor(primaryColour)
+                                .opacity(0.8)
+                                .scaleEffect(1.2)
+                                .frame(width: 50, height: 50)
                         }
+                        .padding(.top)
+                        .padding(.horizontal, 20)
                     }
-                    .focused($focusedField, equals: .confirmed)
-                    .padding()
-                    .frame(width: 360, height: 60)
-                    .background(textfieldColour.cornerRadius(15))
-                    .padding([.horizontal, .top])
                     
-                    Button {
-                        isShowingConfirm.toggle()
-                    } label: {
-                        Image(systemName: isShowingConfirm ? "eye.slash" : "eye")
-                            .accentColor(primaryColour)
-                            .opacity(0.8)
-                            .scaleEffect(1.2)
-                            .frame(width: 50, height: 50)
+                    ZStack(alignment: .trailing) {
+                        Group {
+                            if !isShowingNew {
+                                SecureField("New Password", text: $newPassword)
+                            } else {
+                                TextField("New Password", text: $newPassword)
+                                    .autocorrectionDisabled()
+                                    .autocapitalization(.none)
+                            }
+                        }
+                        .focused($focusedField, equals: .password)
+                        .padding()
+                        .background(textfieldColour.cornerRadius(15))
+                        .frame(maxWidth: 500, maxHeight: 70)
+                        .padding(.top, 10)
+                        .padding(.horizontal, 20)
+                        
+                        Button {
+                            isShowingNew.toggle()
+                        } label: {
+                            Image(systemName: isShowingNew ? "eye.slash" : "eye")
+                                .accentColor(primaryColour)
+                                .opacity(0.8)
+                                .scaleEffect(1.2)
+                                .frame(width: 50, height: 50)
+                        }
+                        .padding(.top)
+                        .padding(.horizontal, 20)
                     }
-                    .offset(x: -20, y: 7)
+                    
+                    ZStack(alignment: .trailing) {
+                        Group {
+                            if !isShowingConfirm {
+                                SecureField("Confirm Password", text: $confirmPassword)
+                            } else {
+                                TextField("Confirm Password", text: $confirmPassword)
+                                    .autocorrectionDisabled()
+                                    .autocapitalization(.none)
+                            }
+                        }
+                        .focused($focusedField, equals: .confirmed)
+                        .padding()
+                        .background(textfieldColour.cornerRadius(15))
+                        .frame(maxWidth: 500, maxHeight: 70)
+                        .padding(.top)
+                        .padding(.horizontal, 20)
+                        
+                        Button {
+                            isShowingConfirm.toggle()
+                        } label: {
+                            Image(systemName: isShowingConfirm ? "eye.slash" : "eye")
+                                .accentColor(primaryColour)
+                                .opacity(0.8)
+                                .scaleEffect(1.2)
+                                .frame(width: 50, height: 50)
+                        }
+                        .padding(.top)
+                        .padding(.horizontal, 20)
+                    }
+            
+                    Image(.security)
+                        .resizable()
+                        .frame(width: geometry.size.width / 1.25, height: geometry.size.width / 1.5)
+                        .padding(20)
                 }
-                Image(.security)
-                    .resizable()
-                    .frame(width: 285, height: 230)
-                    .padding()
-                    .padding(.top, 20)
+                .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
             }
             .padding(.top, showText ? 120 : 0)
             .onChange(of: focusedField, { oldValue, newValue in
@@ -204,6 +204,7 @@ struct ChangePasswordView: View {
                 }
             }
         }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

@@ -159,80 +159,84 @@ struct DailyPictureView: View {
     }
     
     var body: some View {
-        VStack {
-            HStack {
-                Text("Day \(day): \(currentDate)")
-                    .font(Font.custom("AlfaSlabOne-Regular", size: 21))
-                    .foregroundStyle(middle)
-                    .padding(.leading, 20)
-                Spacer()
-                if let retrievedImage = retrievedImage {
-                    let shareImage = Image(uiImage: retrievedImage)
-                    Menu {
-                        ShareLink(item: shareImage, preview: SharePreview("Progress Picture for \(currentDate)", image: shareImage)) {
-                            Label("Share Progress", systemImage: "square.and.arrow.up")
-                        }
-                        Button(role: .destructive) {
-                            deletePhoto()
+        GeometryReader { geometry in
+            VStack {
+                HStack {
+                    Text("Day \(day): \(currentDate)")
+                        .font(Font.custom("AlfaSlabOne-Regular", size: 21))
+                        .foregroundStyle(middle)
+                    Spacer()
+                    if let retrievedImage = retrievedImage {
+                        let shareImage = Image(uiImage: retrievedImage)
+                        Menu {
+                            ShareLink(item: shareImage, preview: SharePreview("Progress Picture for \(currentDate)", image: shareImage)) {
+                                Label("Share Progress", systemImage: "square.and.arrow.up")
+                            }
+                            Button(role: .destructive) {
+                                deletePhoto()
+                            } label: {
+                                Label("Delete Picture", systemImage: "trash")
+                            }
                         } label: {
-                            Label("Delete Picture", systemImage: "trash")
+                            Image(systemName: "ellipsis")
+                                .font(.system(size: 21, weight: .heavy))
+                                .foregroundStyle(middle)
+                                .frame(width: 50, height: 25)
                         }
-                    } label: {
-                        Image(systemName: "ellipsis")
-                            .font(.system(size: 21, weight: .heavy))
-                            .foregroundStyle(middle)
-                            .frame(width: 50, height: 25)
-                            .padding(.trailing, 10)
+                    }
+                }
+                .padding(.vertical, 10)
+                
+                if let retrievedImage = retrievedImage {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(secondaryColour)
+                            .frame(maxWidth: geometry.size.width, maxHeight: geometry.size.height)
+                        
+                        Image(uiImage: retrievedImage)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxWidth: geometry.size.width, maxHeight: geometry.size.height)
+                            .overlay {
+                                if showButton {
+                                    Button {
+                                        withAnimation {
+                                            showNotes = true
+                                        }
+                                    } label: {
+                                        Circle()
+                                            .fill(Color.white.opacity(0.8))
+                                            .overlay {
+                                                Image(systemName: "note.text")
+                                                    .foregroundStyle(secondaryColour.opacity(0.8))
+                                            }
+                                    }
+                                    .frame(width: 40, height: 40)
+                                    .offset(x: -geometry.size.width / 2.75, y: geometry.size.height / 2.5)
+                                }
+                            }
+                            .onTapGesture {
+                                withAnimation {
+                                    showButton.toggle()
+                                }
+                            }
+                    }
+                } else {
+                    PhotosPicker(selection: $selectedItem, matching: .images) {
+                        ContentUnavailableView("Post your daily progress picture here!", systemImage: "dumbbell.fill")
+                            .foregroundStyle(.white)
+                            .frame(maxWidth: geometry.size.width, maxHeight: geometry.size.height)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(.gray, style: StrokeStyle(lineWidth: 5, dash: [10]))
+                            )
+                            .buttonStyle(.plain)
+                            .onChange(of: selectedItem, uploadImage)
                     }
                 }
             }
-            .padding(.vertical, 10)
-            if retrievedImage == nil {
-                PhotosPicker(selection: $selectedItem, matching: .images) {
-                    ContentUnavailableView("Post your daily progress picture here!", systemImage: "dumbbell.fill")
-                        .foregroundStyle(.white)
-                        .frame(width: 350, height: 625)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(.gray, style: StrokeStyle(lineWidth: 5, dash: [10]))
-                        )
-                        .buttonStyle(.plain)
-                        .onChange(of: selectedItem, uploadImage)
-                }
-            } else {
-                if let retrievedImage = retrievedImage {
-                    Image(uiImage: retrievedImage)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 350, height: 625)
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
-                        .overlay {
-                            if showButton {
-                                Button {
-                                    withAnimation {
-                                        showNotes = true
-                                    }
-                                } label: {
-                                    Circle()
-                                        .fill(secondaryColour.opacity(0.8))
-                                        .overlay {
-                                            Image(systemName: "note.text")
-                                                .foregroundStyle(.white.opacity(0.8))
-                                        }
-                                }
-                                .frame(width: 40, height: 40)
-                                .offset(x: -140, y: 280)
-                            }
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(secondaryColour, lineWidth: 5)
-                        }
-                        .onTapGesture {
-                            withAnimation {
-                                showButton.toggle()
-                            }
-                        }
-                }
-            }
+            .padding(.horizontal, geometry.size.width / 25)
+            .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
         }
         .padding(.bottom, 40)
         .onAppear {

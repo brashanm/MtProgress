@@ -33,73 +33,79 @@ struct ChangeProfileView: View {
     
     var body: some View {
         NavigationStack {
-            VStack {
-                if !showText {
-                    Text("Ready for a new look?")
-                        .font(.system(size: 23, weight: .black))
-                        .foregroundStyle(.white)
-                        .multilineTextAlignment(.center)
-                    Text("Update your profile picture using a URL")
-                        .font(.system(size: 20, weight: .medium))
-                        .foregroundStyle(.white)
+            GeometryReader { geometry in
+                VStack {
+                    if !showText {
+                        Text("Ready for a new look?")
+                            .font(.title)
+                            .fontWeight(.black)
+                            .foregroundStyle(.white)
+                            .multilineTextAlignment(.center)
+                        Text("Update your profile picture using a URL")
+                            .font(.title3)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(.white)
+                            .padding()
+                    } else {
+                        Spacer(minLength: 50)
+                    }
+                    
+                    TextField("URL", text: $photoURL)
                         .padding()
-                } else {
-                    Spacer(minLength: 50)
-                }
-                
-                TextField("URL", text: $photoURL)
+                        .background(textfieldColour.cornerRadius(15))
+                        .frame(maxWidth: 500, maxHeight: 70)
+                        .padding(.bottom)
+                        .padding(.horizontal, 20)
+                        .autocorrectionDisabled()
+                        .textInputAutocapitalization(.never)
+                        .keyboardType(.URL)
+                        .focused($focused)
+                        .onAppear {
+                            if let url = viewModel.user?.photoURL {
+                                photoURL = url.absoluteString
+                            }
+                        }
+                    
+                    AsyncImage(url: URL(string: photoURL)) { image in
+                        image
+                            .resizable()
+                            .clipShape(Circle())
+                            .scaledToFill()
+                            .frame(width: geometry.size.width / 1.5, height: geometry.size.width / 1.5)
+                            .onAppear {
+                                validImage = true
+                            }
+                    } placeholder: {
+                        Image(.profile)
+                            .resizable()
+                            .foregroundStyle(middle)
+                            .frame(width: geometry.size.width / 1.5, height: geometry.size.width / 1.5)
+                            .onAppear {
+                                validImage = false
+                            }
+                    }
                     .padding()
-                    .background(textfieldColour.cornerRadius(15))
-                    .frame(width: 360, height: 60)
-                    .padding([.horizontal, .bottom])
-                    .autocorrectionDisabled()
-                    .textInputAutocapitalization(.never)
-                    .keyboardType(.URL)
-                    .focused($focused)
-                    .onAppear {
-                        if let url = viewModel.user?.photoURL {
-                            photoURL = url.absoluteString
+                    
+                    Button {
+                        Task {
+                            await changeProfilePicture()
                         }
+                    } label: {
+                        Capsule()
+                            .fill(secondaryColour)
+                            .frame(width: 150, height: 75)
+                            .overlay {
+                                Text("Confirm")
+                                    .foregroundStyle(middle)
+                                    .font(.system(size: 24, weight: .heavy))
+                            }
                     }
-                
-                AsyncImage(url: URL(string: photoURL)) { image in
-                    image
-                        .resizable()
-                        .clipShape(Circle())
-                        .scaledToFill()
-                        .frame(width: 275, height: 275)
-                        .onAppear {
-                            validImage = true
-                        }
-                } placeholder: {
-                    Image(.profile)
-                        .resizable()
-                        .foregroundStyle(middle)
-                        .frame(width: 275, height: 275)
-                        .onAppear {
-                            validImage = false
-                        }
+                    .buttonStyle(.plain)
+                    .padding()
+                    .disabled(!validImage)
+                    .offset(x: wrongURL ? -5 : 0)
                 }
-                .padding()
-                
-                Button {
-                    Task {
-                        await changeProfilePicture()
-                    }
-                } label: {
-                    Capsule()
-                        .fill(secondaryColour)
-                        .frame(width: 150, height: 75)
-                        .overlay {
-                            Text("Confirm")
-                                .foregroundStyle(middle)
-                                .font(.system(size: 24, weight: .heavy))
-                        }
-                }
-                .buttonStyle(.plain)
-                .padding()
-                .disabled(!validImage)
-                .offset(x: wrongURL ? -5 : 0)
+                .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
             }
             .onChange(of: focused, { oldValue, newValue in
                 withAnimation {
@@ -133,6 +139,7 @@ struct ChangeProfileView: View {
                 Alert(title: Text("Invalid URL"), dismissButton: .cancel((Text("Cancel"))))
             }
         }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

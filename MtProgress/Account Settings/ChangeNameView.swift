@@ -32,38 +32,47 @@ struct ChangeNameView: View {
     }
     var body: some View {
         NavigationStack {
-            VStack {
-                Spacer()
-                
-                if !showText {
-                    Text("Ready for a new name?")
-                        .font(.system(size: 23, weight: .black))
-                        .foregroundStyle(.white)
-                        .multilineTextAlignment(.center)
-                    Text("Update your name below")
-                        .font(.system(size: 20, weight: .medium))
-                        .foregroundStyle(.white)
+            GeometryReader { geometry in
+                VStack {
+                    Spacer()
+                    
+                    if !showText {
+                        Text("Ready for a new name?")
+                            .font(.title)
+                            .fontWeight(.black)
+                            .foregroundStyle(.white)
+                            .multilineTextAlignment(.center)
+                        Text("Update your name below")
+                            .font(.title3)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(.white)
+                            .padding(.top, 5)
+                    } else {
+                        Spacer()
+                    }
+                    
+                    TextField("Name", text: $name)
                         .padding()
-                } else {
+                        .background(textfieldColour.cornerRadius(15))
+                        .frame(maxWidth: 500, maxHeight: 70)
+                        .padding(.top)
+                        .padding(.horizontal, 20)
+                        .focused($focused)
+                        .autocorrectionDisabled()
+                        .autocapitalization(.words)
+                        .onAppear {
+                            name = viewModel.user?.displayName ?? ""
+                        }
+                    
+                    
+                    Image(.name)
+                        .resizable()
+                        .frame(width: geometry.size.width / 1.5, height: geometry.size.width / 1.5)
+                        .padding()
+                    
                     Spacer()
                 }
-                
-                TextField("Name", text: $name)
-                    .textInputAutocapitalization(.words)
-                    .autocorrectionDisabled()
-                    .padding()
-                    .frame(width: 360, height: 60)
-                    .background(textfieldColour.cornerRadius(15))
-                    .padding()
-                    .focused($focused)
-                    .onAppear {
-                        name = viewModel.user?.displayName ?? ""
-                    }
-                Image(.name)
-                    .resizable()
-                    .frame(width: 250, height: 250)
-                    .padding()
-                Spacer()
+                .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
             }
             .onChange(of: focused, { oldValue, newValue in
                 withAnimation {
@@ -111,6 +120,7 @@ struct ChangeNameView: View {
                 }
             }
         }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

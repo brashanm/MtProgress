@@ -41,8 +41,10 @@ struct AccountSettingsView: View {
     
     var body: some View {
         NavigationStack {
-            VStack {
-                HStack {
+            GeometryReader { geometry in
+                VStack {
+                    Spacer()
+                    
                     NavigationLink {
                         ChangeProfileView()
                             .environmentObject(viewModel)
@@ -53,7 +55,7 @@ struct AccountSettingsView: View {
                                     .resizable()
                                     .clipShape(Circle())
                                     .scaledToFill()
-                                    .frame(width: 150, height: 150)
+                                    .frame(width: geometry.size.width / 2.75, height: geometry.size.width / 2.75)
                                     .overlay {
                                         Circle()
                                             .stroke(tertiaryColour, lineWidth: 8)
@@ -62,7 +64,7 @@ struct AccountSettingsView: View {
                                 Image(systemName: "person.crop.circle.fill")
                                     .resizable()
                                     .foregroundStyle(middle)
-                                    .frame(width: 150, height: 150)
+                                    .frame(width: geometry.size.width / 2.75, height: geometry.size.width / 2.75)
                                     .overlay {
                                         Circle()
                                             .stroke(tertiaryColour, lineWidth: 10)
@@ -72,174 +74,175 @@ struct AccountSettingsView: View {
                             Group {
                                 Circle()
                                     .fill(tertiaryColour)
-                                    .frame(width: 40, height: 40)
+                                    .frame(width: geometry.size.width / 12, height: geometry.size.width / 12)
                                 
                                 Image(systemName: "pencil")
-                                    .scaleEffect(1.4)
+                                    .scaleEffect(geometry.size.width / 350)
                                     .foregroundStyle(middle)
                             }
-                            .offset(x: 50, y: 50)
+                            .offset(x: geometry.size.width / 7.5, y: geometry.size.width / 7.5)
                         }
                         .padding(.bottom, 10)
                     }
+                    .padding(.top)
+                    
                     if let user = viewModel.user {
-                        VStack {
-                            Text(user.displayName ?? "")
-                                .foregroundStyle(middle)
-                                .font(.system(size: 26, weight: .heavy))
-                            Text(user.email ?? "")
-                                .buttonStyle(.plain)
-                                .foregroundStyle(middle)
-                                .font(.system(size: 20, weight: .semibold))
-                                .padding(.horizontal)
-                                .padding(.vertical, 2)
-                        }
+                        Text(user.displayName ?? "")
+                            .foregroundStyle(middle)
+                            .font(.title)
+                            .fontWeight(.heavy)
+                            .padding(.bottom, 5)
                     }
-                }
-                
-                Text("Joined on \(creationDate)!")
-                    .font(.system(size: 20, weight: .bold))
-                    .foregroundStyle(middle.opacity(0.6))
-                    .padding(5)
-                
-                NavigationLink {
-                    ChangeNameView()
-                        .environmentObject(viewModel)
-                } label: {
-                    RoundedRectangle(cornerRadius: 25)
-                        .fill(tertiaryColour)
-                        .overlay {
-                            HStack {
-                                Image(systemName: "square.and.pencil")
-                                    .scaleEffect(1.9)
-                                    .foregroundStyle(middle)
-                                    .frame(width: 40, height: 40)
-                                    .padding(.bottom, 6)
-                                
-                                Text("Change Name")
-                                    .foregroundStyle(middle)
-                                    .font(.system(size: 21, weight: .bold))
-                                    .padding()
-                                
-                                Spacer()
-                                
-                                Image(systemName: "chevron.right")
-                                    .scaleEffect(1.2)
-                                    .foregroundStyle(middle)
-                                    .frame(width: 20, height: 20)
-                                
+                    
+                    Text("Joined on \(creationDate)!")
+                        .font(.title3)
+                        .bold()
+                        .foregroundStyle(middle.opacity(0.6))
+                    
+                    NavigationLink {
+                        ChangeNameView()
+                            .environmentObject(viewModel)
+                    } label: {
+                        RoundedRectangle(cornerRadius: 25)
+                            .fill(tertiaryColour)
+                            .overlay {
+                                HStack {
+                                    Image(systemName: "square.and.pencil")
+                                        .scaleEffect(1.9)
+                                        .foregroundStyle(middle)
+                                        .frame(width: geometry.size.width / 20, height: geometry.size.width / 20)
+                                        .padding(.bottom, 6)
+                                    
+                                    Text("Change Name")
+                                        .foregroundStyle(middle)
+                                        .font(.title2)
+                                        .bold()
+                                        .padding()
+                                    
+                                    Spacer()
+                                    
+                                    Image(systemName: "chevron.right")
+                                        .scaleEffect(1.2)
+                                        .foregroundStyle(middle)
+                                        .frame(width: geometry.size.width / 20, height: geometry.size.width / 20)
+                                    
+                                }
+                                .padding(.horizontal, 30)
                             }
-                            .padding(.horizontal, 30)
-                        }
-                        .frame(height: 75)
-                        .padding()
-                }
-                
-                NavigationLink {
-                    ChangePasswordView()
-                        .environmentObject(viewModel)
-                } label: {
-                    RoundedRectangle(cornerRadius: 25)
-                        .fill(tertiaryColour)
-                        .overlay {
-                            HStack {
-                                Image(systemName: "lock.fill")
-                                    .scaleEffect(1.9)
-                                    .foregroundStyle(middle)
-                                    .frame(width: 40, height: 40)
-                                
-                                Text("Change Password")
-                                    .foregroundStyle(middle)
-                                    .font(.system(size: 21, weight: .bold))
-                                    .padding()
-                                
-                                Spacer()
-                                
-                                Image(systemName: "chevron.right")
-                                    .scaleEffect(1.2)
-                                    .foregroundStyle(middle)
-                                    .frame(width: 20, height: 20)
-                                
+                            .frame(height: geometry.size.height / 10)
+                            .padding()
+                    }
+                    
+                    NavigationLink {
+                        ChangePasswordView()
+                            .environmentObject(viewModel)
+                    } label: {
+                        RoundedRectangle(cornerRadius: 25)
+                            .fill(tertiaryColour)
+                            .overlay {
+                                HStack {
+                                    Image(systemName: "lock.fill")
+                                        .scaleEffect(1.9)
+                                        .foregroundStyle(middle)
+                                        .frame(width: geometry.size.width / 20, height: geometry.size.width / 20)
+                                    
+                                    Text("Change Password")
+                                        .foregroundStyle(middle)
+                                        .font(.title2)
+                                        .bold()
+                                        .padding()
+                                    
+                                    Spacer()
+                                    
+                                    Image(systemName: "chevron.right")
+                                        .scaleEffect(1.2)
+                                        .foregroundStyle(middle)
+                                        .frame(width: geometry.size.width / 20, height: geometry.size.width / 20)
+                                    
+                                }
+                                .padding(.horizontal, 30)
                             }
-                            .padding(.horizontal, 30)
-                        }
-                        .frame(height: 75)
-                        .padding()
-                }
-                
-                Button {
-                    requestedSignOut = true
-                } label: {
-                    RoundedRectangle(cornerRadius: 25)
-                        .fill(tertiaryColour)
-                        .overlay {
-                            HStack {
-                                Image(systemName: "rectangle.portrait.and.arrow.right")
-                                    .scaleEffect(1.6)
-                                    .foregroundStyle(middle)
-                                    .frame(width: 40, height: 40)
-                                
-                                Text("Sign Out")
-                                    .foregroundStyle(middle)
-                                    .font(.system(size: 21, weight: .bold))
-                                    .padding()
-                                
-                                Spacer()
-                                
-                                Image(systemName: "chevron.right")
-                                    .scaleEffect(1.2)
-                                    .foregroundStyle(middle)
-                                    .frame(width: 20, height: 20)
-                                
+                            .frame(height: geometry.size.height / 10)
+                            .padding()
+                    }
+                    
+                    Button {
+                        requestedSignOut = true
+                    } label: {
+                        RoundedRectangle(cornerRadius: 25)
+                            .fill(tertiaryColour)
+                            .overlay {
+                                HStack {
+                                    Image(systemName: "rectangle.portrait.and.arrow.right")
+                                        .scaleEffect(1.6)
+                                        .foregroundStyle(middle)
+                                        .frame(width: geometry.size.width / 20, height: geometry.size.width / 20)
+                                    
+                                    Text("Sign Out")
+                                        .foregroundStyle(middle)
+                                        .font(.title2)
+                                        .bold()
+                                        .padding()
+                                    
+                                    Spacer()
+                                    
+                                    Image(systemName: "chevron.right")
+                                        .scaleEffect(1.2)
+                                        .foregroundStyle(middle)
+                                        .frame(width: geometry.size.width / 20, height: geometry.size.width / 20)
+                                    
+                                }
+                                .padding(.horizontal, 30)
                             }
-                            .padding(.horizontal, 30)
-                        }
-                        .frame(height: 75)
-                        .padding()
-                }
-                
-                NavigationLink {
-                    DeleteView()
-                        .environmentObject(viewModel)
-                } label: {
-                    RoundedRectangle(cornerRadius: 25)
-                        .fill(tertiaryColour)
-                        .overlay {
-                            HStack {
-                                Image(systemName: "trash.fill")
-                                    .scaleEffect(1.7)
-                                    .foregroundStyle(.red)
-                                    .frame(width: 40, height: 40)
-                                
-                                Text("Delete Account")
-                                    .foregroundStyle(.red)
-                                    .font(.system(size: 21, weight: .bold))
-                                    .padding()
-                                
-                                Spacer()
-                                
-                                Image(systemName: "chevron.right")
-                                    .scaleEffect(1.2)
-                                    .foregroundStyle(.red)
-                                    .frame(width: 20, height: 20)
+                            .frame(height: geometry.size.height / 10)
+                            .padding()
+                    }
+                    
+                    NavigationLink {
+                        DeleteView()
+                            .environmentObject(viewModel)
+                    } label: {
+                        RoundedRectangle(cornerRadius: 25)
+                            .fill(tertiaryColour)
+                            .overlay {
+                                HStack {
+                                    Image(systemName: "trash.fill")
+                                        .scaleEffect(1.7)
+                                        .foregroundStyle(.red)
+                                        .frame(width: geometry.size.width / 20, height: geometry.size.width / 20)
+                                    
+                                    Text("Delete Account")
+                                        .foregroundStyle(.red)
+                                        .font(.title2)
+                                        .bold()
+                                        .padding()
+                                    
+                                    Spacer()
+                                    
+                                    Image(systemName: "chevron.right")
+                                        .scaleEffect(1.2)
+                                        .foregroundStyle(.red)
+                                        .frame(width: geometry.size.width / 20, height: geometry.size.width / 20)
+                                }
+                                .padding(.horizontal, 30)
                             }
-                            .padding(.horizontal, 30)
-                        }
-                        .frame(height: 75)
-                        .padding()
+                            .frame(height: geometry.size.height / 10)
+                            .padding()
+                    }
+                    
+                    Button {
+                        requestReview()
+                    } label: {
+                        Text("💛  Rate this app")
+                            .font(.system(size: 22, weight: .bold))
+                            .foregroundStyle(middle)
+                    }
+                    
+                    Spacer()
                 }
-                
-                Button {
-                    requestReview()
-                } label: {
-                    Text("💛  Rate this app")
-                        .font(.system(size: 22, weight: .bold))
-                        .foregroundStyle(middle)
-                }
-                .padding(.vertical, 10)
-                .padding(.bottom, 20)
+                .padding(.vertical, geometry.size.height / 30)
+                .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
             }
-            .padding(.top, 50)
             .alert("Are you sure you want to sign out", isPresented: $requestedSignOut) {
                 Button("Sign Out", role: .destructive) {
                     signOut()
@@ -287,6 +290,7 @@ struct AccountSettingsView: View {
                 }
             }
         }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

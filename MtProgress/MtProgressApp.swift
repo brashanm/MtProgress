@@ -24,6 +24,7 @@ struct MtProgressApp: App {
             NavigationView {
                 ContentView()
             }
+            .navigationViewStyle(StackNavigationViewStyle())
         }
     }
 }

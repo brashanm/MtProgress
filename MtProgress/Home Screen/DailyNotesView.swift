@@ -55,7 +55,7 @@ struct DailyNotesView: View {
                     } else {
                         self.notes = ""
                     }
-
+                    
                     if let metric = snapshot["metric"] as? String {
                         self.metric = metric
                     } else {
@@ -94,9 +94,37 @@ struct DailyNotesView: View {
     }
     
     var body: some View {
-        NavigationStack {
+        GeometryReader { geometry in
             VStack {
-                Spacer()
+                HStack {
+                    Text(currentDate)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .font(Font.custom("AlfaSlabOne-Regular", size: 24))
+                        .foregroundStyle(middle)
+                    
+                    Spacer()
+                    
+                    if editable {
+                        Button {
+                            submitData()
+                        } label: {
+                            Image(systemName: "checkmark")
+                                .foregroundStyle(middle)
+                                .font(.title)
+                        }
+                    } else {
+                        Button {
+                            withAnimation {
+                                editable = true
+                            }
+                        } label: {
+                            Image(systemName: "pencil")
+                                .foregroundStyle(middle)
+                                .font(.title)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
                 
                 TextEditor(text: $notes)
                     .padding()
@@ -104,13 +132,12 @@ struct DailyNotesView: View {
                     .font(.system(size: 20, weight: .bold))
                     .foregroundColor(.white)
                     .background(tertiaryColour.cornerRadius(10))
-                    .frame(width: 350, height: 300)
-                    .focused($writing)
+                    .frame(maxWidth: .infinity, maxHeight: 300)
+                    .padding(.vertical)
                     .autocorrectionDisabled()
                     .autocapitalization(.none)
+                    .focused($writing)
                     .disabled(!editable)
-                    .padding()
-                    .padding(.top, 25)
                 
                 HStack {
                     TextField("", text: $weight)
@@ -145,51 +172,15 @@ struct DailyNotesView: View {
                             .padding(.leading)
                     }
                 }
-                .padding(.bottom, 50)
             }
-            .padding(.top)
-            .onAppear {
-                getData()
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(secondaryColour)
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Text(currentDate)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .font(Font.custom("AlfaSlabOne-Regular", size: 22))
-                        .foregroundStyle(middle)
-                        .padding(.top, 25)
-                        .padding(.leading)
-                }
-                ToolbarItem(placement: .topBarTrailing) {
-                    if editable {
-                        Button {
-                            submitData()
-                        } label: {
-                            Image(systemName: "checkmark")
-                                .foregroundStyle(middle)
-                                .font(.system(size: 20, weight: .bold))
-                                .padding()
-                        }
-                        .padding(.top, 25)
-                    } else {
-                        Button {
-                            withAnimation {
-                                editable = true
-                            }
-                        } label: {
-                            Image(systemName: "pencil")
-                                .foregroundStyle(middle)
-                                .font(.system(size: 20, weight: .bold))
-                                .padding()
-                        }
-                        .buttonStyle(.plain)
-                        .padding(.top, 25)
-                    }
-                }
-            }
+            .padding(geometry.size.width / 25)
+            .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
         }
+        .onAppear {
+            getData()
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(secondaryColour)
     }
 }
 

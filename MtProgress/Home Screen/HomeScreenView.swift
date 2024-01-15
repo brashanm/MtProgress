@@ -42,60 +42,61 @@ struct HomeScreenView: View {
     
     var body: some View {
         NavigationStack {
-            VStack {
-                HStack {
-                    Image(.lightLogo)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 70, height: 70)
-                    
-                    Spacer()
-                    
-                    NavigationLink {
-                        AccountSettingsView()
-                            .environmentObject(viewModel)
-                    } label: {
-                        AsyncImage(url: viewModel.user?.photoURL) { image in
-                            image
-                                .resizable()
-                                .clipShape(Circle())
-                                .scaledToFill()
-                                .frame(width: 45, height: 45)
-                        } placeholder: {
-                            Image(systemName: "person.crop.circle.fill")
-                                .resizable()
-                                .foregroundStyle(middle)
-                                .frame(width: 45, height: 45)
+            GeometryReader { geometry in
+                VStack {
+                    HStack {
+                        Image(.lightLogo)
+                            .resizable()
+                            .frame(maxWidth: geometry.size.width / 5, maxHeight: geometry.size.width / 5)
+                        
+                        Spacer()
+                        
+                        NavigationLink {
+                            AccountSettingsView()
+                                .environmentObject(viewModel)
+                        } label: {
+                            AsyncImage(url: viewModel.user?.photoURL) { image in
+                                image
+                                    .resizable()
+                                    .clipShape(Circle())
+                                    .scaledToFill()
+                                    .frame(maxWidth: geometry.size.width / 8, maxHeight: geometry.size.width / 8)
+                            } placeholder: {
+                                Image(systemName: "person.crop.circle.fill")
+                                    .resizable()
+                                    .foregroundStyle(middle)
+                                    .frame(maxWidth: geometry.size.width / 8, maxHeight: geometry.size.width / 8)
+                            }
                         }
-                        .id(UUID())
+                        .buttonStyle(.plain)
                     }
-                    .buttonStyle(.plain)
-                }
-                .padding(.top, 45)
-                .padding(.horizontal, 20)
-                
-                TabView(selection: $selectedTab) {
-                    ForEach(0..<dateArray.count, id: \.self) { index in
-                        DailyPictureView(date: dateArray[index])
-                            .environmentObject(viewModel)
-                            .tag(index)
+                    .padding(.top, geometry.size.height / 20)
+                    .padding(.horizontal, geometry.size.width / 25)
+                    
+                    TabView(selection: $selectedTab) {
+                        ForEach(0..<dateArray.count, id: \.self) { index in
+                            DailyPictureView(date: dateArray[index])
+                                .environmentObject(viewModel)
+                                .tag(index)
+                        }
+                    }
+                    .tabViewStyle(PageTabViewStyle())
+                    .onAppear {
+                        getDateRange()
                     }
                 }
-                .tabViewStyle(PageTabViewStyle())
+                .ignoresSafeArea()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(primaryColour)
+                .toolbar(.hidden)
                 .onAppear {
-                    getDateRange()
-                }
-            }
-            .ignoresSafeArea()
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(primaryColour)
-            .toolbar(.hidden)
-            .onAppear {
-                if let window = UIApplication.shared.windows.first {
-                    window.backgroundColor = UIColor(red: 58 / 255, green: 58 / 255, blue: 81 / 255, alpha: 1)
+                    if let window = UIApplication.shared.windows.first {
+                        window.backgroundColor = UIColor(red: 58 / 255, green: 58 / 255, blue: 81 / 255, alpha: 1)
+                    }
                 }
             }
         }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 
