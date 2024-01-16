@@ -1,5 +1,8 @@
 # Mount Progress - Reach New Heights in Your Fitness Journey
 
+[![Mount Progress Demo](https://img.youtube.com/vi/vvZFeVeqBFw/0.jpg)](https://www.youtube.com/watch?v=vvZFeVeqBFw)
+
+
 ## Overview
 As the new year unfolds, so does the opportunity for transformative change. Introducing Mount Progress, your ultimate companion on the journey to a stronger, healthier you
 
