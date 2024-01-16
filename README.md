@@ -18,6 +18,4 @@ Make 2024 the year you conquer your fitness goals. Download Mount Progress now a
 
 * Data Management with Firebase: Leveraging the power of Firebase Storage for photo uploads and Cloud Firestore for efficient data management, Mount Progress ensures that user data is not only secure but also easily accessible for personal reflection and goal setting.
 
-## How It's Built
-Mount Progress is meticulously crafted using Swift, SwiftUI, and Firebase technologies. The app employs a CRUD approach to facilitate the creation, retrieval, updating, and deletion of user data, ensuring a seamless and intuitive user experience. The successful integration of Firebase Auth, Storage, and Cloud Firestore culminates in a reliable and efficient fitness companion.
 
