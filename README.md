@@ -1,7 +1,5 @@
 # Mount Progress - Reach New Heights in Your Fitness Journey
 
-![image](https://github.com/brashanm/MtProgress/assets/97188295/ab0f0c11-149e-4a24-ac42-e7b09b0e25e0)
-
 ## Overview
 As the new year unfolds, so does the opportunity for transformative change. Introducing Mount Progress, your ultimate companion on the journey to a stronger, healthier you
 
@@ -20,5 +18,5 @@ Make 2024 the year you conquer your fitness goals. Download Mount Progress now a
 
 * Data Management with Firebase: Leveraging the power of Firebase Storage for photo uploads and Cloud Firestore for efficient data management, Mount Progress ensures that user data is not only secure but also easily accessible for personal reflection and goal setting.
 
-## Demo
+![image](https://github.com/brashanm/MtProgress/assets/97188295/ab0f0c11-149e-4a24-ac42-e7b09b0e25e0)
 
