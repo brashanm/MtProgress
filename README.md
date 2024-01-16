@@ -1,7 +1,6 @@
 # Mount Progress - Reach New Heights in Your Fitness Journey
 
-![image](https://github.com/brashanm/MtProgress/assets/97188295/f62b9ceb-88f2-458b-9449-f2463ae850b8)
-
+![image](https://github.com/brashanm/MtProgress/assets/97188295/ab0f0c11-149e-4a24-ac42-e7b09b0e25e0)
 
 ## Overview
 As the new year unfolds, so does the opportunity for transformative change. Introducing Mount Progress, your ultimate companion on the journey to a stronger, healthier you
