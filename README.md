@@ -21,6 +21,3 @@ Make 2024 the year you conquer your fitness goals. Download Mount Progress now a
 ## How It's Built
 Mount Progress is meticulously crafted using Swift, SwiftUI, and Firebase technologies. The app employs a CRUD approach to facilitate the creation, retrieval, updating, and deletion of user data, ensuring a seamless and intuitive user experience. The successful integration of Firebase Auth, Storage, and Cloud Firestore culminates in a reliable and efficient fitness companion.
 
-## Get Started
-Embark on your fitness journey with Mount Progress. Whether you're a seasoned fitness enthusiast or just beginning your path to a healthier lifestyle, Mount Progress is designed to empower you every step of the way.
-
