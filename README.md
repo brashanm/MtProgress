@@ -12,7 +12,9 @@ Document every sweat-soaked victory with progress pictures that showcase your ha
 
 Mount Progress seamlessly integrates with your daily routine, making recording and reflecting on your fitness journey effortless. From gym enthusiasts to beginners, our user-friendly interface ensures everyone can navigate their path to success.
 
-Make 2024 the year you conquer your fitness goals. Download Mount Progress now and turn your resolutions into remarkable results. Your journey to a stronger, healthier you starts here!
+Make 2024 the year you conquer your fitness goals. Download Mount Progress now and turn your resolutions into remarkable results. Your journey to a stronger, healthier you starts here! 
+
+Check it out here: https://apps.apple.com/ca/app/mount-progress/id6476077436
 
 ## Key Features
 * Progress Tracking: Mount Progress allows users to track their fitness journey with ease. Users can upload regular progress pictures, document weight changes, and add relevant notes. The app employs a CRUD-based system, ensuring a seamless and user-friendly experience.
