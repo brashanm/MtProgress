@@ -19,9 +19,9 @@ Check it out here: https://apps.apple.com/ca/app/mount-progress/id6476077436
 ## Key Features
 * Progress Tracking: Mount Progress allows users to track their fitness journey with ease. Users can upload regular progress pictures, document weight changes, and add relevant notes. The app employs a CRUD-based system, ensuring a seamless and user-friendly experience.
 
-* Secure User Authentication: Built with Swift and SwiftUI, Mount Progress prioritizes user security with robust authentication through Firebase Auth. Users can create accounts securely, establishing a trustworthy foundation for their fitness documentation.
+* Secure User Authentication: Built with Swift and SwiftUI, Mount Progress prioritizes user security with robust authentication through AWS Cognito. Users can create accounts securely, establishing a trustworthy foundation for their fitness documentation.
 
-* Data Management with Firebase: Leveraging the power of Firebase Storage for photo uploads and Cloud Firestore for efficient data management, Mount Progress ensures that user data is not only secure but also easily accessible for personal reflection and goal setting.
+* Data Management with AWS DynamoDB: Leveraging the power of AWS S3 buckets for photo uploads and AWS DynamoDB for efficient data management, Mount Progress ensures that user data is not only secure but also easily accessible for personal reflection and goal setting.
 
 ![](https://private-user-images.githubusercontent.com/97188295/297150586-ab0f0c11-149e-4a24-ac42-e7b09b0e25e0.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MDU0MzE2MzgsIm5iZiI6MTcwNTQzMTMzOCwicGF0aCI6Ii85NzE4ODI5NS8yOTcxNTA1ODYtYWIwZjBjMTEtMTQ5ZS00YTI0LWFjNDItZTdiMDliMGUyNWUwLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNDAxMTYlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjQwMTE2VDE4NTUzOFomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTAyZDgzMTNlNjRlYTEyNDNmMGQwNzBiNjdjODIwYjRlZTUzZWU2NmM3NjNkMzg4MGJhMDIzNDgzYjBiYmI2NzQmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JmFjdG9yX2lkPTAma2V5X2lkPTAmcmVwb19pZD0wIn0.nlvbZVKsBDK8ZgLpaeq-hEcP-QbNpFuqMo-3Qphmb2A)
 
