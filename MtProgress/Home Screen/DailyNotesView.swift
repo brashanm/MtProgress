@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import FirebaseFirestore
+import Amplify
 
 struct DailyNotesView: View {
     let date: Date
@@ -19,6 +19,16 @@ struct DailyNotesView: View {
     
     @FocusState var writing: Bool
     @State private var editable: Bool = false
+    
+    var dataStoreService: DataStoreService
+    var storageService: StorageService
+    
+    init(image: UIImage,
+        manager: ServiceManager = AppServiceManager.shared) {
+        self.selectedImage = image
+        self.dataStoreService = manager.dataStoreService
+        self.storageService = manager.storageService
+    }
     
     var currentDate: String {
         let dateFormatter = DateFormatter()
@@ -37,7 +47,7 @@ struct DailyNotesView: View {
         let currentDate = date
         let formattedDate = dateFormatter.string(from: currentDate)
         
-        let db = Firestore.firestore()
+        let db = self.storageService()
         
         guard let userID = viewModel.user?.uid else { return }
         let docRef = db.collection(userID).document(formattedDate)
@@ -75,7 +85,7 @@ struct DailyNotesView: View {
         
         let currentDate = date
         let formattedDate = dateFormatter.string(from: currentDate)
-        let db = Firestore.firestore()
+        let db = self.storageService()
         let documentRef = db.collection(userID).document(formattedDate)
         documentRef.updateData([
             "weight": weight,

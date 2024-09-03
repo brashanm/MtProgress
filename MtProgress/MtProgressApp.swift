@@ -6,19 +6,19 @@
 //
 
 import SwiftUI
-import FirebaseCore
-import FirebaseAuth
-
-class AppDelegate: NSObject, UIApplicationDelegate {
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-        FirebaseApp.configure()
-        return true
-    }
-}
+import Combine
+import Amplify
+import AWSCognitoAuthPlugin
+import AWSDataStorePlugin
+import AWSAPIPlugin
+import AWSS3StoragePlugin
 
 @main
 struct MtProgressApp: App {
-    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    init() {
+        configureAmplify()
+        AppServiceManager.shared.configure()
+    }
     var body: some Scene {
         WindowGroup {
             NavigationView {
@@ -26,5 +26,22 @@ struct MtProgressApp: App {
             }
             .navigationViewStyle(StackNavigationViewStyle())
         }
+    }
+}
+
+func configureAmplify() {
+    
+    #if DEBUG
+    Amplify.Logging.logLevel = .verbose
+    #endif
+
+    do {
+        try Amplify.add(plugin: AWSCognitoAuthPlugin())
+        try Amplify.add(plugin: AWSDataStorePlugin(modelRegistration: AmplifyModels()))
+        try Amplify.add(plugin: AWSAPIPlugin())
+        try Amplify.add(plugin: AWSS3StoragePlugin())
+        try Amplify.configure()
+    } catch {
+        Amplify.log.error(error: error)
     }
 }

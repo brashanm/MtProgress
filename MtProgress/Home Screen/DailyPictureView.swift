@@ -6,8 +6,7 @@
 //
 
 import SwiftUI
-import FirebaseFirestore
-import FirebaseStorage
+import Amplify
 import PhotosUI
 
 struct DailyPictureView: View {
@@ -17,6 +16,15 @@ struct DailyPictureView: View {
     @State private var retrievedImage: UIImage?
     @State private var showButton = false
     @State private var showNotes = false
+    var dataStoreService: DataStoreService
+    var storageService: StorageService
+    
+    init(image: UIImage,
+        manager: ServiceManager = AppServiceManager.shared) {
+        self.selectedImage = image
+        self.dataStoreService = manager.dataStoreService
+        self.storageService = manager.storageService
+    }
     
     var day: Int {
         let calendar = Calendar.current
@@ -58,7 +66,7 @@ struct DailyPictureView: View {
             let fileRef = storageRef.child(path)
             fileRef.putData(imageData) { metadata, error in
                 if error == nil && metadata != nil {
-                    let db = Firestore.firestore()
+                    let db = storageService()
                     let documentRef = db.collection(userID).document(formattedDate)
                     documentRef.setData([
                         "url": path,
@@ -88,7 +96,7 @@ struct DailyPictureView: View {
         let formattedDate = dateFormatter.string(from: currentDate)
         
         Task {
-            let db = Firestore.firestore()
+            let db = self.storageService()
             let storageRef = Storage.storage().reference()
             guard let userID = viewModel.user?.uid else { return }
             let docRef = db.collection(userID).document(formattedDate)
@@ -128,7 +136,7 @@ struct DailyPictureView: View {
         let currentDate = date
         let formattedDate = dateFormatter.string(from: currentDate)
         
-        let db = Firestore.firestore()
+        let db = self.storageService()
         let documentRef = db.collection(userID).document(formattedDate)
         documentRef.updateData([
             "url": ""
@@ -161,32 +169,33 @@ struct DailyPictureView: View {
     var body: some View {
         GeometryReader { geometry in
             VStack {
-                HStack {
-                    Text("Day \(day): \(currentDate)")
-                        .font(Font.custom("AlfaSlabOne-Regular", size: 21))
-                        .foregroundStyle(middle)
-                    Spacer()
-                    if let retrievedImage = retrievedImage {
-                        let shareImage = Image(uiImage: retrievedImage)
-                        Menu {
-                            ShareLink(item: shareImage, preview: SharePreview("Progress Picture for \(currentDate)", image: shareImage)) {
-                                Label("Share Progress", systemImage: "square.and.arrow.up")
-                            }
-                            Button(role: .destructive) {
-                                deletePhoto()
+                if !showNotes {
+                    HStack {
+                        Text("Day \(day): \(currentDate)")
+                            .font(Font.custom("AlfaSlabOne-Regular", size: 21))
+                            .foregroundStyle(middle)
+                        Spacer()
+                        if let retrievedImage = retrievedImage {
+                            let shareImage = Image(uiImage: retrievedImage)
+                            Menu {
+                                ShareLink(item: shareImage, preview: SharePreview("Progress Picture for \(currentDate)", image: shareImage)) {
+                                    Label("Share Progress", systemImage: "square.and.arrow.up")
+                                }
+                                Button(role: .destructive) {
+                                    deletePhoto()
+                                } label: {
+                                    Label("Delete Picture", systemImage: "trash")
+                                }
                             } label: {
-                                Label("Delete Picture", systemImage: "trash")
+                                Image(systemName: "ellipsis")
+                                    .font(.system(size: 21, weight: .heavy))
+                                    .foregroundStyle(middle)
+                                    .frame(width: 50, height: 25)
                             }
-                        } label: {
-                            Image(systemName: "ellipsis")
-                                .font(.system(size: 21, weight: .heavy))
-                                .foregroundStyle(middle)
-                                .frame(width: 50, height: 25)
                         }
                     }
+                    .padding(.vertical, 10)
                 }
-                .padding(.vertical, 10)
-                
                 if let retrievedImage = retrievedImage {
                     ZStack {
                         RoundedRectangle(cornerRadius: 10)
@@ -238,7 +247,7 @@ struct DailyPictureView: View {
             .padding(.horizontal, geometry.size.width / 25)
             .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
         }
-        .padding(.bottom, 40)
+        .padding(.bottom, 20)
         .onAppear {
             retrievePhoto()
         }

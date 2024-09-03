@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import FirebaseAuth
+import Amplify
 import Combine
 import UserNotifications
 
@@ -180,7 +180,7 @@ extension AuthenticationViewModel {
     }
     
     func reauthenticate(email: String, password: String) async -> Bool {
-        let credential = FirebaseAuth.EmailAuthProvider.credential(withEmail: email, password: password)
+        let credential = Amplify.Auth.EmailAuthProvider.credential(withEmail: email, password: password)
         do {
             try await user?.reauthenticate(with: credential)
             return true

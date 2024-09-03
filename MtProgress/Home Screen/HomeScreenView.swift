@@ -8,8 +8,7 @@
 import SwiftUI
 import PhotosUI
 import Foundation
-import FirebaseStorage
-import FirebaseFirestore
+import Amplify
 
 struct HomeScreenView: View {
     @EnvironmentObject var viewModel: AuthenticationViewModel
